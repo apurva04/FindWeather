@@ -21,6 +21,26 @@
                 <td></td>
                 <td><button ng-click=FindWeather()>Find Weather</button></td>
             </tr>
+            <tr>
+                <td>humidity</td>
+                <td>{{detail.humidity}}</td>
+            </tr>
+            <tr>
+                <td>pressure</td>
+                <td>{{detail.pressure}}</td>
+            </tr>
+            <tr>
+                <td>temp</td>
+                <td>{{detail.temp}}</td>
+            </tr>
+            <tr>
+                <td>temp_max</td>
+                <td>{{detail.temp_max}}</td>
+            </tr>
+            <tr>
+                <td>temp_min</td>
+                <td>{{detail.temp_min}}</td>
+            </tr>
 
         </table>
     </div>
@@ -29,17 +49,22 @@
 
         app.controller('ctrl', function ($scope, $timeout, weatherService) {
             $scope.detail = {};
+            $scope.detail.humidity =null;
+            $scope.detail.pressure =null;
+            $scope.detail.temp =null;
+            $scope.detail.temp_max =null;
+            $scope.detail.temp_min=null;
             $scope.name = "hi";
             $scope.city = "London";
             $scope.FindWeather = function () {
                 alert("clicked to find weather :)");
                 weatherService.getWeather($scope.city).then(function (success) {
-                    console.log(success.data.main);
-                    detail.humidity=success.data.main.humidity;
-                    detail.pressure=success.data.main.pressure;
-                    detail.temp=success.data.main.humidity;
-                    detail.temp_max=success.data.main.temp_max;
-                    detail.temp_min==success.data.main.temp_min;
+                    console.log(success);
+                    $scope.detail.humidity = success.data.main.humidity;
+                    $scope.detail.pressure = success.data.main.pressure;
+                    $scope.detail.temp = success.data.main.humidity;
+                    $scope.detail.temp_max = success.data.main.temp_max;
+                    $scope.detail.temp_min = success.data.main.temp_min;
 
 
                 }, function (error) {
@@ -50,7 +75,7 @@
 
             }
 
-           
+
 
         });
 
@@ -68,10 +93,10 @@
                 var defer = $q.defer();
 
                 $http.post('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&APPID=1f25a705c8a8519449e91f13526045b1').then(function (response) {
-                    
+
                     defer.resolve(response);
                 }, function (error) {
-                    
+
                     defer.reject(response);
                 });
                 return defer.promise;
