@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Find Waether App</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+
+<body ng-app="myApp">
+    <div class="container" ng-controller="ctrl">
+        <table class="table">
+            <tr class="row">
+                <td>Type your place {{name}}</td>
+                <td><input type="text" my-dir></td>
+            </tr>
+
+        </table>
+    </div>
+    <script>
+        var app = angular.module('myApp', []);
+        app.controller('ctrl', function ($scope) {
+            $scope.detail={};
+            $scope.name="hi";
+
+        });
+        app.directive('myDir', function () {
+            return {
+                link:function(scope,ele,attr,ctrl){
+
+
+                }
+
+            }
+        });
+    </script>
+
+
+</body>
+
+</html>
