@@ -6,33 +6,79 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
 </head>
 
 <body ng-app="myApp">
+
     <div class="container" ng-controller="ctrl">
         <table class="table">
             <tr class="row">
                 <td>Type your place {{name}}</td>
-                <td><input type="text" my-dir></td>
+                <td><input type="text" my-dir ng-model="city"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><button ng-click=FindWeather()>Find Weather</button></td>
             </tr>
 
         </table>
     </div>
     <script>
         var app = angular.module('myApp', []);
-        app.controller('ctrl', function ($scope) {
-            $scope.detail={};
-            $scope.name="hi";
 
-        });
-        app.directive('myDir', function () {
-            return {
-                link:function(scope,ele,attr,ctrl){
+        app.controller('ctrl', function ($scope, $timeout, weatherService) {
+            $scope.detail = {};
+            $scope.name = "hi";
+            $scope.city = "London";
+            $scope.FindWeather = function () {
+                alert("clicked to find weather :)");
+                weatherService.getWeather($scope.city).then(function (success) {
+                    console.log(success.data.main);
+                    detail.humidity=success.data.main.humidity;
+                    detail.pressure=success.data.main.pressure;
+                    detail.temp=success.data.main.humidity;
+                    detail.temp_max=success.data.main.temp_max;
+                    detail.temp_min==success.data.main.temp_min;
 
 
-                }
+                }, function (error) {
+                    alert("Wrong place entered");
+                    console.log(error);
+
+                });
 
             }
+
+           
+
+        });
+
+        app.factory('weatherService', function ($q, $http) {
+
+            var object = {};
+
+            object.getWeather = function (city) {
+                console.log(city + " from factory");
+
+                if (city == null) {
+                    return object;
+
+                }
+                var defer = $q.defer();
+
+                $http.post('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&APPID=1f25a705c8a8519449e91f13526045b1').then(function (response) {
+                    
+                    defer.resolve(response);
+                }, function (error) {
+                    
+                    defer.reject(response);
+                });
+                return defer.promise;
+            }
+
+            return object;
+
         });
     </script>
 
